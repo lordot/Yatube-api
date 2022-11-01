@@ -5,17 +5,17 @@ from rest_framework.pagination import LimitOffsetPagination
 
 from rest_framework.filters import SearchFilter
 
-from posts.models import Post, Comment, Group, User, Follow
+from posts.models import Post, Group, User
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 
-from .serializers import PostSerializer, CommentSerializer, GroupSerializer, FollowSerializer
+import serializers
 from .permissions import IsAuthor
 
 
 class PostsViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
-    serializer_class = PostSerializer
+    serializer_class = serializers.PostSerializer
     permission_classes = [IsAuthor, ]
     pagination_class = LimitOffsetPagination
 
@@ -29,11 +29,11 @@ class GroupViewSet(
     mixins.RetrieveModelMixin
 ):
     queryset = Group.objects.all()
-    serializer_class = GroupSerializer
+    serializer_class = serializers.GroupSerializer
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    serializer_class = CommentSerializer
+    serializer_class = serializers.CommentSerializer
     permission_classes = [IsAuthor, ]
 
     def get_post(self):
@@ -55,7 +55,7 @@ class FollowViewSet(
     mixins.ListModelMixin,
     mixins.CreateModelMixin
 ):
-    serializer_class = FollowSerializer
+    serializer_class = serializers.FollowSerializer
     permission_classes = [IsAuthenticated, ]
     filter_backends = [SearchFilter, ]
     search_fields = ['following__username', ]
@@ -79,4 +79,6 @@ class FollowViewSet(
             return Response('Same username', status=HTTP_400_BAD_REQUEST)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=HTTP_201_CREATED, headers=headers)
+        return Response(
+            serializer.data, status=HTTP_201_CREATED, headers=headers
+        )
