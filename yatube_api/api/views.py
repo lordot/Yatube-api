@@ -9,13 +9,13 @@ from posts.models import Post, Group, User
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 
-import serializers
+from .serializers import *
 from .permissions import IsAuthor
 
 
 class PostsViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
-    serializer_class = serializers.PostSerializer
+    serializer_class = PostSerializer
     permission_classes = [IsAuthor, ]
     pagination_class = LimitOffsetPagination
 
@@ -29,11 +29,11 @@ class GroupViewSet(
     mixins.RetrieveModelMixin
 ):
     queryset = Group.objects.all()
-    serializer_class = serializers.GroupSerializer
+    serializer_class = GroupSerializer
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.CommentSerializer
+    serializer_class = CommentSerializer
     permission_classes = [IsAuthor, ]
 
     def get_post(self):
@@ -55,7 +55,7 @@ class FollowViewSet(
     mixins.ListModelMixin,
     mixins.CreateModelMixin
 ):
-    serializer_class = serializers.FollowSerializer
+    serializer_class = FollowSerializer
     permission_classes = [IsAuthenticated, ]
     filter_backends = [SearchFilter, ]
     search_fields = ['following__username', ]
