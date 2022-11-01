@@ -1,10 +1,33 @@
 # API YATUBE
 API прокта yatube
 
+Cоздать и активировать виртуальное окружение:
 
-бла бла
+```
+python3 -m venv env
+```
 
+```
+source env/bin/activate
+```
 
-бла бла 
+```
+python3 -m pip install --upgrade pip
+```
 
-бла бла 
+Установить зависимости из файла requirements.txt:
+
+```
+pip install -r requirements.txt
+```
+
+Выполнить миграции:
+
+```
+python3 manage.py migrate
+```
+
+Запустить проект:
+
+```
+python3 manage.py runserver
