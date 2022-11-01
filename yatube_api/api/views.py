@@ -9,7 +9,8 @@ from posts.models import Post, Group, User
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 
-from .serializers import *
+from .serializers import PostSerializer, CommentSerializer
+from .serializers import FollowSerializer, GroupSerializer
 from .permissions import IsAuthor
 
 
