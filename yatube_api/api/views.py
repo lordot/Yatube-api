@@ -5,9 +5,7 @@ from rest_framework.pagination import LimitOffsetPagination
 
 from rest_framework.filters import SearchFilter
 
-from posts.models import Post, Group, User
-from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_201_CREATED
+from posts.models import Post, Group
 
 from .serializers import PostSerializer, CommentSerializer
 from .serializers import FollowSerializer, GroupSerializer
