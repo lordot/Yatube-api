@@ -15,7 +15,7 @@ from .permissions import IsAuthor
 
 
 class PostsViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = Post.objects.select_related('author', 'group')
     serializer_class = PostSerializer
     permission_classes = [IsAuthor, ]
     pagination_class = LimitOffsetPagination
@@ -42,8 +42,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         return post
 
     def get_queryset(self):
-        post = self.get_post()
-        queryset = post.comments.select_related('author')
+        queryset = self.get_post().comments.select_related('author')
         return queryset
 
     def perform_create(self, serializer):
@@ -68,18 +67,3 @@ class FollowViewSet(
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
-    def create(self, request, *args, **kwargs,):
-        user = self.request.user
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        following = User.objects.get(username=self.request.data['following'])
-        if user.follower.filter(following=following).exists():
-            return Response('Already following', status=HTTP_400_BAD_REQUEST)
-        elif user == following:
-            return Response('Same username', status=HTTP_400_BAD_REQUEST)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=HTTP_201_CREATED, headers=headers
-        )
