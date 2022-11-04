@@ -9,13 +9,13 @@ from posts.models import Post, Group
 
 from .serializers import PostSerializer, CommentSerializer
 from .serializers import FollowSerializer, GroupSerializer
-from .permissions import IsAuthor
+from .permissions import IsAuthorOrReadOnly
 
 
 class PostsViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.select_related('author', 'group')
     serializer_class = PostSerializer
-    permission_classes = [IsAuthor, ]
+    permission_classes = [IsAuthorOrReadOnly, ]
     pagination_class = LimitOffsetPagination
 
     def perform_create(self, serializer):
@@ -33,19 +33,20 @@ class GroupViewSet(
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthor, ]
+    permission_classes = [IsAuthorOrReadOnly, ]
 
     def get_post(self):
         post = get_object_or_404(Post, pk=self.kwargs.get("post_id"))
         return post
 
     def get_queryset(self):
-        queryset = self.get_post().comments.select_related('author')
-        return queryset
+        return self.get_post().comments.select_related('author')
 
     def perform_create(self, serializer):
-        post = self.get_post()
-        serializer.save(author=self.request.user, post=post)
+        serializer.save(
+            author=self.request.user,
+            post=self.get_post()
+        )
 
 
 class FollowViewSet(
