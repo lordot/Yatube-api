@@ -1,7 +1,7 @@
 
 # Yatube API
 
-The yatube project API was created to entertain various applications and services with Yatube. The interface allows you to perform all possible actions with posts, comments and subscriptions. To use, you need to register on the Yatube website.
+The yatube project API was created to entertain various applications and services with Yatube. The interface allows you to perform all possible actions with posts, comments and subscriptions. To use, you need to register on the Yatube website. Core is here https://github.com/lordot/Yatube-core
 ## Run Locally
 
 At the first start, for the project to function, it is necessary to install a virtual environment and perform migrations:
