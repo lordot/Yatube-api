@@ -22,29 +22,39 @@ Run server:
     
 
 After launch, the admin panel will be available at http://127.0.0.1:8000/admin/
+
 ## API Reference
 
-#### Get all items
+#### Get auth token
 
 ```http
-  GET /api/items
+  POST api/v1/api-token-auth/
 ```
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
+| `username` | `string` | **Required**. Your superuser name |
+| `password` | `string` | **Required**. Your superuser password |
 
-#### Get item
+#### Get posts:
 
 ```http
-  GET /api/items/${id}
+  GET, POST, PUT, PATCH, DELETE /api/v1/posts/
+  GET, POST, PUT, PATCH, DELETE /api/v1/posts/$id/
 ```
 
-| Parameter | Type     | Description                       |
+| Headers | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
+| `Authorization`      | `string` | Token <YOUR_TOKEN> |
 
-#### add(num1, num2)
+#### Get groups:
 
-Takes two numbers and returns the sum.
+```http
+  GET, POST, PUT, PATCH, DELETE /api/v1/groups/
+  GET, POST, PUT, PATCH, DELETE /api/v1/groups/$id/
+```
+
+| Headers | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `Authorization`      | `string` | Token <YOUR_TOKEN> |
 
